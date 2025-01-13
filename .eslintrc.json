@@ -16,7 +16,7 @@
   },
   "ignorePatterns": ["jest.config.ts"],
   "rules": {
-    "no-console": "error",
+    "no-console": "off",
     "indent": ["error", 2],
     "comma-dangle": ["error", "always-multiline"],
     "quotes": ["error", "single"],
