@@ -7,3 +7,7 @@ export const createBookValidationSchema = Joi.object({
   genres: Joi.array().items(Joi.string()).required(),
   stock: Joi.number().required(),
 });
+
+export const getBookByIdValidationSchema = Joi.object({
+  id: Joi.string().uuid().required(),
+});

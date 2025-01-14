@@ -11,6 +11,15 @@ const BookService = {
       throw serviceError(error);
     }
   },
+
+  getById: async (id: string) => {
+    try {
+      const book = await BookRepository.getById(id);
+      return book;
+    } catch (error: unknown) {
+      throw serviceError(error);
+    }
+  },
 };
 
 export default BookService;

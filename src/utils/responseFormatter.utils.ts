@@ -2,9 +2,7 @@ import { Response } from 'express';
 
 const ResponseFormatter = {
   success: (res: Response, data: unknown) => (
-    res.json({
-      data,
-    })
+    res.json(data)
   ),
 
   failed: (res: Response, { status = 400, message = 'An unknown error occurred' }) => (
