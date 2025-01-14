@@ -43,14 +43,21 @@ export const serviceError = (catchError: unknown): Error => {
 
 export const controllerError = (catchError: unknown) => {
   let message = 'An unknown error occurred';
+  let code = 400;
 
   if (isGeneralError(catchError)) {
     message = catchError.message;
   }
 
+  if (message.includes('Database')) {
+    code = 500;
+  } else if (message.includes('not found')) {
+    code = 404;
+  }
+
   const result = {
     message,
-    code: message.includes('Database') ? 500 : 400,
+    code,
   };
 
   return result;
