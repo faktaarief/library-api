@@ -36,6 +36,28 @@ const BookService = {
       throw serviceError(error);
     }
   },
+
+  update: async (id: string, book: Book) => {
+    try {
+      const checkBook = await BookRepository.getById(id);
+
+      if (!checkBook) {
+        throw new Error('Book not found.');
+      }
+
+      const { title, author } = book;
+      const checkTitleAuthor = await BookRepository.getByTitleAndAuthor(title, author);
+
+      if (checkTitleAuthor && checkTitleAuthor.id !== id) {
+        throw new Error('Book with the same title and author already exists.');
+      }
+
+      const createdBook = await BookRepository.update(id, book);
+      return createdBook;
+    } catch (error: unknown) {
+      throw serviceError(error);
+    }
+  },
 };
 
 export default BookService;

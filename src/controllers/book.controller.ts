@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import ResponseFormatter from '../utils/responseFormatter.utils';
 import { controllerError } from '../utils/customError.utils';
 import BookService from '../services/book.service';
-import { createBookValidationSchema, getBookByIdValidationSchema } from '../validations/book.validation';
+import { createBookValidationSchema, getBookByIdValidationSchema, updateBookValidationSchema } from '../validations/book.validation';
 import { Book, QueryParams } from '../models/book.model';
 
 const BookController = {
@@ -61,6 +61,28 @@ const BookController = {
       const books = await BookService.getAll(queryParams);
 
       ResponseFormatter.success(res, books);
+    } catch (error: unknown) {
+      const parsingError = controllerError(error);
+
+      ResponseFormatter.failed(res, {
+        status: parsingError.code,
+        message: parsingError.message,
+      });
+    }
+  },
+
+  update: async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { error } = updateBookValidationSchema.validate(req.body);
+      const { id } = req.params;
+
+      if (error) {
+        throw Error(error.details[0].message);
+      }
+
+      const updatedBook = await BookService.update(id, req.body);
+
+      ResponseFormatter.success(res, updatedBook);
     } catch (error: unknown) {
       const parsingError = controllerError(error);
 

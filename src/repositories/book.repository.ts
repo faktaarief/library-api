@@ -135,6 +135,44 @@ const BookRepository = {
       throw repositoryError(error);
     }
   },
+
+  update: async (id: string, book: Book): Promise<Book> => {
+    try {
+      const updateQuery = `
+        UPDATE books
+        SET title = ?, author = ?, publishedYear = ?, genres = ?, stock = ?
+        WHERE id = ?
+      `;
+
+      const {
+        title,
+        author,
+        publishedYear,
+        genres,
+        stock,
+      } = book;
+
+      await db.execute(updateQuery, [
+        title,
+        author,
+        publishedYear,
+        JSON.stringify(genres),
+        stock,
+        id,
+      ]);
+
+      return {
+        id,
+        title,
+        author,
+        publishedYear,
+        genres,
+        stock,
+      };
+    } catch (error: unknown) {
+      throw repositoryError(error);
+    }
+  },
 };
 
 export default BookRepository;
