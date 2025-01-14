@@ -4,6 +4,8 @@
   "description": "RESTful API using TypeScript for managing a library book management system.",
   "main": "index.ts",
   "scripts": {
+    "start": "node dist/server.js",
+    "build": "tsc --build tsconfig.build.json",
     "dev": "nodemon src/server.ts",
     "test": "jest"
   },
