@@ -30,9 +30,7 @@ export const serviceError = (catchError: unknown): Error => {
   let message = 'An unknown error occurred';
 
   if (isGeneralError(catchError)) {
-    if (catchError.name === 'RepositoryError') {
-      message = catchError.message;
-    }
+    message = catchError.message;
   }
 
   const error = new Error(message);

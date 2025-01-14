@@ -3,7 +3,7 @@ import ResponseFormatter from '../utils/responseFormatter.utils';
 import { controllerError } from '../utils/customError.utils';
 import BookService from '../services/book.service';
 import { createBookValidationSchema, getBookByIdValidationSchema } from '../validations/book.validation';
-import { Book } from '../models/book.model';
+import { Book, QueryParams } from '../models/book.model';
 
 const BookController = {
   create: async (req: Request, res: Response): Promise<void> => {
@@ -38,6 +38,29 @@ const BookController = {
       const book: Book | null = await BookService.getById(value.id);
 
       ResponseFormatter.success(res, book);
+    } catch (error: unknown) {
+      const parsingError = controllerError(error);
+
+      ResponseFormatter.failed(res, {
+        status: parsingError.code,
+        message: parsingError.message,
+      });
+    }
+  },
+
+  getAll: async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { page, limit, search } = req.query;
+
+      const queryParams: QueryParams = {
+        page: page ? Number(page) : 1,
+        limit: limit ? Number(limit) : 10,
+        search: search ? String(search) : '',
+      };
+
+      const books = await BookService.getAll(queryParams);
+
+      ResponseFormatter.success(res, books);
     } catch (error: unknown) {
       const parsingError = controllerError(error);
 

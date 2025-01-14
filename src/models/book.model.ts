@@ -6,3 +6,9 @@ export interface Book {
   genres: string[];
   stock: number;
 }
+
+export interface QueryParams {
+  page: number;
+  limit: number;
+  search?: string | null;
+}
