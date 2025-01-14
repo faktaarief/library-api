@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import { RowDataPacket } from 'mysql2';
+import { RowDataPacket, ResultSetHeader } from 'mysql2';
 import { Book, QueryParams } from '../models/book.model';
 import db from '../config/db.config';
 import { repositoryError } from '../utils/customError.utils';
@@ -42,7 +42,9 @@ const BookRepository = {
       `;
 
       const [rows] = await db.query<RowDataPacket[]>(query, [id]);
-      if (rows.length === 0) return null;
+      if (rows.length === 0) {
+        throw Error('Book not found');
+      }
 
       const { genres, ...book } = rows[0];
 
@@ -169,6 +171,23 @@ const BookRepository = {
         genres,
         stock,
       };
+    } catch (error: unknown) {
+      throw repositoryError(error);
+    }
+  },
+
+  delete: async (id: string): Promise<void> => {
+    try {
+      const query = `
+        DELETE FROM books
+        WHERE id = ?
+      `;
+
+      const [result] = await db.execute<ResultSetHeader>(query, [id]);
+
+      if (result.affectedRows === 0) {
+        throw Error('Book not found');
+      }
     } catch (error: unknown) {
       throw repositoryError(error);
     }

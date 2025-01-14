@@ -92,6 +92,24 @@ const BookController = {
       });
     }
   },
+
+  delete: async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { id } = req.params;
+
+      await BookService.delete(id);
+      const deletedBook = { message: 'Book deleted successfully' };
+
+      ResponseFormatter.success(res, deletedBook);
+    } catch (error: unknown) {
+      const parsingError = controllerError(error);
+
+      ResponseFormatter.failed(res, {
+        status: parsingError.code,
+        message: parsingError.message,
+      });
+    }
+  },
 };
 
 export default BookController;

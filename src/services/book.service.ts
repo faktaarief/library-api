@@ -58,6 +58,15 @@ const BookService = {
       throw serviceError(error);
     }
   },
+
+  delete: async (id: string) => {
+    try {
+      const deletedBook = await BookRepository.delete(id);
+      return deletedBook;
+    } catch (error: unknown) {
+      throw serviceError(error);
+    }
+  },
 };
 
 export default BookService;

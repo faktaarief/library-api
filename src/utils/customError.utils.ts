@@ -18,6 +18,8 @@ export const repositoryError = (catchError: unknown): Error => {
 
   if (isMySQL2Error(catchError)) {
     message = `Database error occurred: ${catchError.sqlMessage}`;
+  } else if (isGeneralError(catchError)) {
+    message = catchError.message;
   }
 
   const error = new Error(message);
